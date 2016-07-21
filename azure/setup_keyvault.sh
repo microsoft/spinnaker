@@ -15,7 +15,7 @@ set -o pipefail
 #   - VM Password
 
 function usage {
-    echo "Usage: setup_keyvault.sh -s \"<service_principal_name>\" -u <VM_username> -p <VM_Password> [-a <AppID>] -h"      
+    echo "Usage: setup_keyvault.sh -s \"<service_principal_name>\" -u \"<VM_username>\" -p \"<VM_Password>\" [-a <AppID>] -h"      
 }
 
 DEFAULT_RESOURCE_GROUP="SpinnakerDefault"
@@ -104,7 +104,13 @@ function verify_login() {
 #    - Region (default: East-US)
 function create_resource_group() {
     # see if the resource group already exists. If not, then create it
-    local RESOURCE_GROUP=`azure group show $DEFAULT_RESOURCE_GROUP --json | jq '.name'`
+    local RESPONSE=`azure group show $DEFAULT_RESOURCE_GROUP --json`
+    local RESOUCE_GROUP=""
+    rc=$?
+    if [[ $rc != 0 ]]; then
+        local RESOURCE_GROUP=`echo $RESPONSE | jq '.name'`
+    fi
+
     if [[ "$RESOUCE_GROUP" != "$DEFAULT_SPINNAKER_GROUP" ]]; then    
         echo "Create Resource Group $DEFAULT_RESOURCE_GROUP in Region $DEFAULT_REGION"
         SUCCESS=`azure group create $DEFAULT_RESOURCE_GROUP $DEFAULT_REGION --json | jq '.properties.provisioningState'`
@@ -220,7 +226,7 @@ function set_secrets_permissions() {
     if [[ $rc -gt 0 ]]; then
         echo "Grant Access to Secret operation failed"        
         exit $rc
-    fi
+    fi    
 }
 
 process_args "$@"
