@@ -9,7 +9,7 @@ Spinnaker site and http://www.spinnaker.io/docs/target-deployment-setup[Installa
 
 If you want more information on how Spinnaker is designed, see the http://www.spinnaker.io/docs/overview[Documentation Overview].
 
-= Setting Up Spinnaker For Development
+= Setting Up Spinnaker for Development
 
 These instructions cover pulling Spinnaker from source and setting up to run locally against Amazon Web Services and/or Google Cloud Platform accounts. 
 
@@ -133,5 +133,5 @@ cd $SPINNAKER_HOME/build
 ----
 
 If a service is provided, then just that one service will be stopped.
-If no service is provided then all the spinnaker services will be stopped.
+If no service is provided, then all the spinnaker services will be stopped.
 Cassandra and Redis are not affected by `stop_dev.sh`.
